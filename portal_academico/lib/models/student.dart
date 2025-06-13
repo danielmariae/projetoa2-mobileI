@@ -1,6 +1,7 @@
 import 'document.dart';
 
 class Student {
+  final String id;
   final String registrationNumber;
   final String name;
   final String email;
@@ -12,6 +13,7 @@ class Student {
   bool canReenroll; // Se pode fazer rematrícula
 
   Student({
+    required this.id,
     required this.registrationNumber,
     required this.name,
     required this.email,
@@ -25,6 +27,7 @@ class Student {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'registrationNumber': registrationNumber,
       'name': name,
       'email': email,
@@ -43,6 +46,7 @@ class Student {
         documentsJson.map((docJson) => Document.fromJson(docJson)).toList();
 
     return Student(
+      id: json['id'],
       registrationNumber: json['registrationNumber'],
       name: json['name'],
       email: json['email'],

@@ -10,22 +10,32 @@ class SituationScreen extends StatefulWidget {
 }
 
 class _SituationScreenState extends State<SituationScreen> {
-  late Future<Student> _studentFuture;
-  final String _studentId = '2'; // ID do aluno logado
+  late Future<Student?> _studentFuture;
+  final String _studentId= '2'; // Matrícula do aluno logado
 
   @override
   void initState() {
     super.initState();
-    _studentFuture = StudentService.getStudents().then(
-      (students) => students.firstWhere((s) => s.registrationNumber == _studentId),
-    );
+    _studentFuture = _loadStudent();
+  }
+
+  Future<Student?> _loadStudent() async {
+    try {
+      final students = await StudentService.getStudents();
+      return students.firstWhere(
+        (s) => s.id == _studentId,
+        orElse: () => throw Exception('Aluno não encontrado'),
+      );
+    } catch (e) {
+      return null;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Situação Acadêmica')),
-      body: FutureBuilder<Student>(
+      body: FutureBuilder<Student?>(
         future: _studentFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -34,7 +44,7 @@ class _SituationScreenState extends State<SituationScreen> {
           if (snapshot.hasError) {
             return Center(child: Text('Erro: ${snapshot.error}'));
           }
-          if (!snapshot.hasData) {
+          if (!snapshot.hasData || snapshot.data == null) {
             return const Center(child: Text('Dados do aluno não encontrados'));
           }
 
@@ -52,19 +62,29 @@ class _SituationScreenState extends State<SituationScreen> {
                       children: [
                         Text('Nome: ${student.name}', style: const TextStyle(fontSize: 18)),
                         Text('Matrícula: ${student.registrationNumber}'),
+                        Text('Curso: ${student.course}'),
                         Text('Status: ${student.status}'),
+                        Text('Progresso: ${student.progress}%'),
                         Text('Rematrícula: ${student.canReenroll ? 'Liberada' : 'Não liberada'}'),
                       ],
                     ),
                   ),
                 ),
                 const SizedBox(height: 16),
-                const Text('Documentos:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                const Text(
+                  'Documentos:',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
                 ...student.documents.map((doc) => ListTile(
                   title: Text(doc.type),
-                  trailing: Text(doc.status, style: TextStyle(
-                    color: doc.status == 'Pendente' ? Colors.red : Colors.green,
-                  )),
+                  trailing: Text(
+                    doc.status,
+                    style: TextStyle(
+                      color: doc.status == 'Pendente' 
+                          ? Colors.red 
+                          : Colors.green,
+                    ),
+                  ),
                 )).toList(),
               ],
             ),
