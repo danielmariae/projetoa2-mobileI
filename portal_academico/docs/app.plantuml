@@ -1,0 +1,68 @@
+@startuml
+class Student {
+  -String registrationNumber
+  -String name
+  -String course
+  -String status
+  +Map<String, dynamic> toJson()
+}
+
+class Discipline {
+  -String name
+  -int workload
+  -String status
+  +Map<String, dynamic> toJson()
+}
+
+class AcademicRecord {
+  -List<Discipline> disciplines
+  +Map<String, dynamic> toJson()
+}
+
+class User {
+  -String email
+  -String password
+  +Map<String, dynamic> toJson()
+}
+
+class Document {
+  -String type
+  -bool isRequired
+  -bool isSubmitted
+  -DateTime? submissionDate
+  +bool isValid()
+}
+
+class Reenrollment {
+  -DateTime deadline
+  -bool isCompleted
+  +bool validateDocuments(List<Document>)
+}
+
+
+Student "1" *-- "many" Discipline
+Student "1" -- "1" AcademicRecord
+User "1" -- "1" Student
+
+class AuthService {
+  +Future<bool> login(String email, String password)
+}
+
+class ApiService {
+  +Future<Student> getStudentData()
+  +Future<List<Discipline>> getCurriculum()
+}
+
+class LoginScreen
+class DashboardScreen
+class AcademicStatusScreen
+
+AuthService ..> User
+ApiService ..> Student
+ApiService ..> Discipline
+LoginScreen ..> AuthService
+DashboardScreen ..> ApiService
+AcademicStatusScreen ..> ApiService
+Student "1" *-- "many" Document
+Student "1" -- "1" Reenrollment
+@enduml
