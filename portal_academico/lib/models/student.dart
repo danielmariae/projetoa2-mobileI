@@ -9,6 +9,7 @@ class Student {
   final String status; // Matriculado, Ativo, etc.
   final String course;
   final int progress;
+  final int period;
   final List<Document> documents;
   bool canReenroll; // Se pode fazer rematrícula
 
@@ -21,6 +22,7 @@ class Student {
     required this.status,
     required this.course,
     required this.progress,
+    required this.period,
     required this.documents,
     this.canReenroll = true,
   });
@@ -35,6 +37,7 @@ class Student {
       'status': status,
       'course': course,
       'progress': progress,
+      'period': period,
       'documents': documents.map((doc) => doc.toJson()).toList(),
       'canReenroll': canReenroll,
     };
@@ -54,6 +57,7 @@ class Student {
       status: json['status'],
       course: json['course'],
       progress: json['progress'],
+      period: json['period'],
       documents: documentsList,
       canReenroll: json['canReenroll'],
     );

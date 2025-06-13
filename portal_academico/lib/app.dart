@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         '/dashboard': (context) => const DashboardScreen(),
         '/boletim': (context) => const BoletimScreen(),
         '/grade': (context) => const GradeScreen(),
-        '/rematricula': (context) => const ReenrollmentScreen(),
+        '/rematricula': (context) => const ReenrollmentScreen(studentName: 'Lucas Santos', studentId: '2'),
         '/situacao': (context) => const SituationScreen(),
         '/analise': (context) => const AnalysisScreen(),
       },

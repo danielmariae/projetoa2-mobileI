@@ -12,11 +12,13 @@ class BoletimScreen extends StatefulWidget {
 class _BoletimScreenState extends State<BoletimScreen> {
   late Future<List<Discipline>> _disciplinesFuture;
   final String _studentId = '2'; // ID do aluno logado
+  final int _studentPeriod = 4; // ID do aluno logado
+
 
   @override
   void initState() {
     super.initState();
-    _disciplinesFuture = DisciplineService.getDisciplinasByAluno(_studentId);
+    _disciplinesFuture = DisciplineService.getDisciplinasPorPeriodo(_studentId, _studentPeriod);
   }
 
   @override

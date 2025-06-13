@@ -15,6 +15,14 @@ class StudentService {
     }
   }
 
+  static Future<Student> getStudentById(String studentId) async {
+    final response = await http.get(Uri.parse('$baseUrl/$studentId'));
+    if (response.statusCode == 200) {
+      return Student.fromJson(jsonDecode(response.body));
+    }
+    throw Exception('Erro ao carregar aluno');
+  }
+  
   static Future<void> addStudent(Student student) async {
     await http.post(
       Uri.parse(baseUrl),
